@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useAuth } from '../lib/hooks/useAuth'
-import { Menu, X, User, LogOut } from 'lucide-react'
+import { Menu, X, User, LogOut, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 import AuthModal from './AuthModal'
 
@@ -39,6 +39,11 @@ export default function Navbar() {
                 <Link href="/dashboard" className="text-gray-700 hover:text-primary-600 font-medium">
                   Личный кабинет
                 </Link>
+                {/* 👇 ДОБАВИТЬ ЭТУ ССЫЛКУ */}
+                <Link href="/progress" className="text-gray-700 hover:text-primary-600 font-medium flex items-center gap-1">
+                  <TrendingUp size={16} />
+                  <span>Мой прогресс</span>
+                </Link>
               </div>
             </div>
 
@@ -46,6 +51,13 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-4">
+                  <Link 
+                    href="/progress" 
+                    className="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium"
+                  >
+                    <TrendingUp size={16} />
+                    <span>Прогресс</span>
+                  </Link>
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
                       <User size={18} className="text-primary-600" />
@@ -111,6 +123,15 @@ export default function Navbar() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Личный кабинет
+                </Link>
+                {/* 👇 ДОБАВИТЬ ЭТУ ССЫЛКУ */}
+                <Link 
+                  href="/progress" 
+                  className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <TrendingUp size={16} />
+                  <span>Мой прогресс</span>
                 </Link>
                 
                 {user ? (

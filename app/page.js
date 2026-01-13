@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Rocket, Users, Target, Award, ChevronRight, PlayCircle, BookOpen, Clock, Star } from 'lucide-react'
+import { Rocket, Users, Target, Award, ChevronRight, PlayCircle, BookOpen, Clock, Star, Brain, Sparkles } from 'lucide-react'
 import { supabase } from './lib/supabase'
+import LearningPlanGenerator from './components/LearningPlanGenerator'
+import { useAuth } from './lib/hooks/useAuth'
 
 export default function Home() {
   const [courses, setCourses] = useState([])
@@ -12,6 +14,8 @@ export default function Home() {
     completionRate: 95,
     averageRating: 4.8
   })
+  
+  const { user } = useAuth()
 
   useEffect(() => {
     loadFeaturedCourses()
@@ -89,6 +93,111 @@ export default function Home() {
                 <div className="text-3xl font-bold mb-1">{stats.averageRating}/5</div>
                 <div className="text-gray-600">Средний рейтинг</div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 👇 НОВАЯ СЕКЦИЯ: ИИ-Наставник и генератор планов */}
+      <section className="py-16 bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-4 py-2 rounded-full mb-4">
+              <Brain size={18} />
+              <span className="font-medium">ИИ-Наставник в действии</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Начни учиться с ИИ уже сегодня
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Получи персональный план и задавай вопросы 24/7
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Генератор учебных планов */}
+            <div>
+              <LearningPlanGenerator />
+            </div>
+            
+            {/* Приветствие для авторизованных */}
+            <div className="card h-full">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
+                  <Sparkles className="text-white" size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">
+                    {user ? `Привет, ${user.email?.split('@')[0]}!` : 'Добро пожаловать в SkillForge!'}
+                  </h3>
+                  <p className="text-gray-600">
+                    {user 
+                      ? 'Твой ИИ-наставник готов помочь! Нажми на иконку в правом нижнем углу.' 
+                      : 'Войди, чтобы получить персональные рекомендации и отслеживать прогресс'
+                    }
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                  <h4 className="font-bold mb-2 flex items-center gap-2 text-blue-700">
+                    <span>💡</span> Советы от ИИ-наставника
+                  </h4>
+                  <ul className="text-sm text-gray-700 space-y-1.5">
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500">•</span>
+                      <span>Учись по 30 минут в день для лучшего запоминания</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500">•</span>
+                      <span>Практикуйся сразу после изучения теории</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500">•</span>
+                      <span>Задавай вопросы ИИ-наставнику в чате справа внизу</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500">•</span>
+                      <span>Отслеживай прогресс в разделе "Мой прогресс"</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div className="p-4 bg-green-50 rounded-xl border border-green-100">
+                  <h4 className="font-bold mb-2 flex items-center gap-2 text-green-700">
+                    <span>🚀</span> Быстрый старт с ИИ
+                  </h4>
+                  <p className="text-sm text-gray-700 mb-3">
+                    Нажми на иконку чата в правом нижнем углу и скажи:
+                  </p>
+                  <div className="space-y-2">
+                    <div className="bg-white/80 p-3 rounded-lg text-xs border">
+                      "Объясни <span className="text-primary-600 font-medium">Python</span> для начинающих"
+                    </div>
+                    <div className="bg-white/80 p-3 rounded-lg text-xs border">
+                      "Помоги с <span className="text-primary-600 font-medium">английской грамматикой</span>"
+                    </div>
+                    <div className="bg-white/80 p-3 rounded-lg text-xs border">
+                      "Создай план изучения <span className="text-primary-600 font-medium">квантовой физики</span>"
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {!user && (
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <p className="text-sm text-gray-600 mb-3">
+                    Хочешь сохранять прогресс и получать персонализированные планы?
+                  </p>
+                  <Link 
+                    href="/progress" 
+                    className="block w-full text-center btn-secondary"
+                  >
+                    Создать аккаунт
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -237,10 +346,13 @@ export default function Home() {
               <ChevronRight className="ml-2" />
             </Link>
 
-            <button className="inline-flex items-center justify-center px-8 py-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl font-bold hover:bg-white/30 transition-colors">
+            <Link
+              href="/progress"
+              className="inline-flex items-center justify-center px-8 py-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl font-bold hover:bg-white/30 transition-colors"
+            >
               <PlayCircle className="mr-2" />
-              Посмотреть демо
-            </button>
+              Отслеживать прогресс
+            </Link>
           </div>
 
           <p className="mt-8 opacity-75">

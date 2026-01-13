@@ -1,5 +1,7 @@
+// app/layout.js
 import './globals.css'
 import Navbar from './components/Navbar'
+import AiTutor from './components/AiTutor' // ← ДОБАВИТЬ ЭТОТ ИМПОРТ
 
 export const metadata = {
   title: 'SkillForge - ИИ-наставник для обучения',
@@ -17,6 +19,7 @@ export default function RootLayout({ children }) {
         <main className="min-h-[calc(100vh-4rem)]">
           {children}
         </main>
+        <AiTutor /> {/* ← ДОБАВИТЬ ЭТУ СТРОКУ - ЧАТ ПОЯВИТСЯ НА ВСЕХ СТРАНИЦАХ */}
         <Footer />
       </body>
     </html>
